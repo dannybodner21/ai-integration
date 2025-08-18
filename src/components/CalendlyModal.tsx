@@ -37,6 +37,24 @@ const CalendlyModal = ({ isOpen, onClose }: CalendlyModalProps) => {
           utm: {}
         });
       }
+
+      // Add event listener for Calendly booking events
+      const handleCalendlyEvent = (e: MessageEvent) => {
+        if (e.data.event && e.data.event.indexOf("calendly.event_scheduled") === 0) {
+          // Fire Meta Pixel event when someone books
+          if (window.fbq) {
+            window.fbq('track', 'BookedAppointment');
+            console.log('Calendly booking detected - Meta Pixel BookedAppointment event fired');
+          }
+        }
+      };
+
+      window.addEventListener('message', handleCalendlyEvent);
+
+      // Cleanup function
+      return () => {
+        window.removeEventListener('message', handleCalendlyEvent);
+      };
     }
   }, [isOpen]);
 
