@@ -110,7 +110,7 @@ const OfferStack = () => {
           <div className="text-center">
             <button 
               onClick={() => setIsCalendlyModalOpen(true)}
-              className="inline-flex items-center px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-lg font-semibold shadow-lg hover:shadow-xl"
+              className="inline-flex items-center px-8 py-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-all text-lg font-semibold shadow-lg hover:shadow-xl"
             >
               👉 "Book Your 15-Minute Fit Call"
             </button>

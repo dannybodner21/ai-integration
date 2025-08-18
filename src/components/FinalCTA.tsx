@@ -18,7 +18,7 @@ const FinalCTA = () => {
           
           <button 
             onClick={() => setIsCalendlyModalOpen(true)}
-            className="inline-flex items-center px-8 py-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-lg font-semibold shadow-lg hover:shadow-xl group"
+            className="inline-flex items-center px-8 py-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-all text-lg font-semibold shadow-lg hover:shadow-xl group"
           >
             👉 "Book Your 15-Minute Fit Call"
             <ArrowRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />

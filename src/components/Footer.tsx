@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import emailjs from 'emailjs-com';
+import CalendlyModal from "./CalendlyModal";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCalendlyModalOpen, setIsCalendlyModalOpen] = useState(false);
   const { toast } = useToast();
 
   const handleSubscribe = async (e: React.FormEvent) => {
@@ -70,11 +72,7 @@ const Footer = () => {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 pb-10 border-b border-gray-700">
           <div className="lg:col-span-2">
-            <img 
-              src="/lovable-uploads/7d120ee6-3614-4b75-9c35-716d54490d67.png" 
-              alt="WRLDS Technologies Logo" 
-              className="h-10 w-auto mb-6 invert" // Added invert to make logo white
-            />
+            <h1 className="text-3xl font-bold text-white mb-6">CREW CUT</h1>
             <p className="text-gray-300 mb-6">
               We build custom AI and SaaS tools that cut costs and unlock new revenue streams, delivering production-ready solutions in just 14 days while you keep 100% ownership.
             </p>
@@ -94,9 +92,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4 text-white">Company</h3>
             <ul className="space-y-3">
-              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/careers" className="text-gray-300 hover:text-white transition-colors">Careers</Link></li>
-              <li><Link to="/privacy-policy" className="text-gray-300 hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/" className="text-gray-300 hover:text-white transition-colors">Home</Link></li>
+              <li><Link to="/apps" className="text-gray-300 hover:text-white transition-colors">Our Apps</Link></li>
+              <li><button onClick={() => setIsCalendlyModalOpen(true)} className="text-gray-300 hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
             </ul>
           </div>
           
@@ -130,14 +128,20 @@ const Footer = () => {
         </div>
         
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © {new Date().getFullYear()} WRLDS Technologies. All rights reserved.
+          <p className="text-white text-sm mb-4 md:mb-0">
+            © {new Date().getFullYear()} CREW CUT. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <Link to="/privacy-policy" className="text-sm text-gray-400 hover:text-white transition-colors">Privacy Policy</Link>
           </div>
         </div>
       </div>
+      
+      {/* Calendly Modal */}
+      <CalendlyModal
+        isOpen={isCalendlyModalOpen}
+        onClose={() => setIsCalendlyModalOpen(false)}
+      />
     </footer>
   );
 };

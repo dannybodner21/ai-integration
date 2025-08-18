@@ -19,11 +19,11 @@ const PrivacyPolicy = () => {
             <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
             
             <div className="prose prose-lg max-w-none">
-              <p className="text-gray-600 mb-6">Last updated: April 11, 2025</p>
+              <p className="text-gray-600 mb-6">Last updated: January 27, 2025</p>
               
               <h2 className="text-2xl font-semibold mt-8 mb-4">1. Introduction</h2>
               <p className="text-gray-600 mb-4">
-                At WRLDS Technologies ("we," "our," or "us"), we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+                At Crew Cut ("we," "our," or "us"), we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
               </p>
               
               <h2 className="text-2xl font-semibold mt-8 mb-4">2. Information We Collect</h2>
@@ -85,7 +85,7 @@ const PrivacyPolicy = () => {
               </p>
               
               <h2 className="text-2xl font-semibold mt-8 mb-4">10. Contact Us</h2>
-              <p className="text-gray-600 mb-4">If you have any questions about this Privacy Policy, please contact us at hello@wrlds.com</p>
+              <p className="text-gray-600 mb-4">If you have any questions about this Privacy Policy, please contact us at rickibodner@gmail.com</p>
               
             </div>
           </div>
