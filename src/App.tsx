@@ -18,6 +18,7 @@ import About from "./pages/About";
 import Apps from "./pages/Apps";
 import AppDetail from "./pages/AppDetail";
 import WritingEditor from "./pages/WritingEditor";
+import AILogisticsOptimizer2 from "./pages/AILogisticsOptimizer2";
 import Careers from "./pages/Careers";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Blog from "./pages/Blog";
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="/apps" element={<Apps />} />
             <Route path="/apps/:appId" element={<AppDetail />} />
             <Route path="/apps/writing-editor" element={<WritingEditor />} />
+            <Route path="/apps/ai-logistics-optimizer-2" element={<AILogisticsOptimizer2 />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/blog" element={<Blog />} />

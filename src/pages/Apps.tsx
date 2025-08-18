@@ -152,7 +152,7 @@ const Apps = () => {
             >
               {filteredApps.map((app) => (
                 <motion.div key={app.id} variants={itemVariants}>
-                  <Card className="h-full hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300 group">
+                  <Card className="h-full hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300 group flex flex-col">
                     <CardHeader className="pb-3">
                       <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300">
                         <img
@@ -169,7 +169,7 @@ const Apps = () => {
                       </CardDescription>
                     </CardHeader>
                     
-                    <CardContent className="pb-3">
+                    <CardContent className="pb-3 flex-1">
                       <div className="mb-4">
                         <h4 className="text-sm font-medium text-gray-700 mb-2">Features:</h4>
                         <div className="flex flex-wrap gap-1">
@@ -203,12 +203,12 @@ const Apps = () => {
                       </div>
                     </CardContent>
                     
-                    <CardFooter className="pt-0">
+                    <CardFooter className="pt-0 mt-auto">
                       <div className="w-full flex gap-2">
                         <div className="w-full flex gap-2">
-                          {app.id === 'writing-editor' ? (
+                          {(app.id === 'writing-editor' || app.id === 'ai-logistics-optimizer-2') ? (
                             <Button asChild className="flex-1" size="sm">
-                              <Link to="/apps/writing-editor">
+                              <Link to={app.demoUrl || `/apps/${app.id}`}>
                                 <Play className="h-4 w-4 mr-2" />
                                 Try Demo
                               </Link>

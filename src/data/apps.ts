@@ -26,6 +26,22 @@ export const apps: App[] = [
     ],
     technologies: ['React', 'TypeScript', 'OpenAI API', 'Tailwind CSS'],
     demoUrl: '/apps/writing-editor'
+  },
+  {
+    id: 'ai-logistics-optimizer-2',
+    title: 'AI Real Estate Deal Analyzer',
+    description: 'Streamline property investment decisions with AI-powered financial modeling, automated deal analysis, and professional reporting for multi-family real estate portfolios.',
+    image: '/ai real estate.png',
+    category: 'Productivity',
+    features: [
+      'Automated deal analysis',
+      'Professional PDF reports',
+      'AI-powered insights',
+      'Financial modeling',
+      'Portfolio management'
+    ],
+    technologies: ['React', 'Recharts', 'Claude API', 'TypeScript'],
+    demoUrl: '/apps/ai-logistics-optimizer-2'
   }
 ];
 
