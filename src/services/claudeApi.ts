@@ -30,34 +30,30 @@ class ClaudeAPIService {
     this.defaultModel = 'claude-3-sonnet-20240229';
   }
 
-  private async makeRequest(requestBody: ClaudeRequest): Promise<ClaudeResponse> {
-    if (!this.apiKey) {
-      throw new Error('Claude API key not found. Please set VITE_CLAUDE_API_KEY environment variable.');
-    }
-
+  private async makeRequest(requestBody: ClaudeRequest): Promise<any> {
     try {
-      const response = await fetch(this.baseUrl, {
+      // Call our backend server instead of Claude API directly
+      const response = await fetch('http://localhost:3001/api/claude', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.apiKey,
-          'anthropic-version': '2023-06-01'
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+          userMessage: requestBody.messages[requestBody.messages.length - 1].content,
+          conversationHistory: requestBody.messages.slice(0, -1),
+          systemPrompt: requestBody.system
+        })
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(`Claude API error: ${response.status} ${response.statusText} - ${errorData.error?.message || 'Unknown error'}`);
+        throw new Error(`Backend error: ${response.status} ${response.statusText} - ${errorData.error || 'Unknown error'}`);
       }
 
       const data = await response.json();
-      return {
-        content: data.content,
-        usage: data.usage
-      };
+      return data;
     } catch (error) {
-      console.error('Error calling Claude API:', error);
+      console.error('Error calling backend:', error);
       throw error;
     }
   }
@@ -81,12 +77,10 @@ class ClaudeAPIService {
 
     try {
       const response = await this.makeRequest(requestBody);
-      
-      if (response.content && response.content.length > 0) {
-        return response.content[0].content;
-      } else {
-        throw new Error('No response content received from Claude API');
+      if (response?.text && typeof response.text === 'string') {
+        return response.text;
       }
+      throw new Error('No response text received from backend');
     } catch (error) {
       console.error('Error in Claude chat:', error);
       throw error;
@@ -95,13 +89,13 @@ class ClaudeAPIService {
 
   // Method to check if API is properly configured
   isConfigured(): boolean {
-    return !!this.apiKey;
+    return true; // Backend handles the API key
   }
 
   // Method to get API configuration status
   getConfigStatus(): { configured: boolean; model: string } {
     return {
-      configured: this.isConfigured(),
+      configured: true,
       model: this.defaultModel
     };
   }

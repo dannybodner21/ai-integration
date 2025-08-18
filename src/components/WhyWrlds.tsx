@@ -3,7 +3,7 @@ import { Zap, BarChart, Rocket, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import CalendlyModal from "./CalendlyModal";
 
-const WhyWrlds = () => {
+const WhyCrewCut = () => {
   const [isCalendlyModalOpen, setIsCalendlyModalOpen] = useState(false);
 
   const containerVariants = {
@@ -29,54 +29,54 @@ const WhyWrlds = () => {
 
   return (
     <>
-      <section id="why-wrlds" className="relative py-16 md:py-24 bg-white overflow-hidden">
+      <section id="why-crewcut" className="relative py-16 md:py-24 bg-white overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-full opacity-60"></div>
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-gray-50 to-blue-50 rounded-full opacity-60"></div>
         </div>
-        
+
         <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            className="text-center mb-16" 
-            initial="hidden" 
-            whileInView="visible" 
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={itemVariants}
           >
-            <motion.h2 
-              variants={itemVariants} 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+            <motion.h2
+              variants={itemVariants}
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6 leading-tight"
             >
               Why Keep Paying for People When Code Can Do It Better?
             </motion.h2>
           </motion.div>
-          
-          <motion.div 
-            className="mb-16" 
-            initial="hidden" 
-            whileInView="visible" 
+
+          <motion.div
+            className="mb-16"
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={containerVariants}
           >
             <div className="max-w-5xl mx-auto">
-              <motion.div 
+              <motion.div
                 variants={itemVariants}
                 className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-8 md:p-12 mb-8 border border-gray-100 shadow-sm"
               >
-                <motion.p 
-                  variants={itemVariants} 
+                <motion.p
+                  variants={itemVariants}
                   className="text-gray-600 text-lg md:text-xl max-w-4xl mx-auto leading-relaxed mb-6"
                 >
                   Every 7– and 8–figure company hits the same wall: growth comes with bloated payroll, endless busywork, and $100K consultants who talk more than they ship.
                 </motion.p>
-                <motion.p 
-                  variants={itemVariants} 
+                <motion.p
+                  variants={itemVariants}
                   className="text-gray-600 text-lg md:text-xl max-w-4xl mx-auto leading-relaxed mb-6"
                 >
                   Custom AI flips that script. Instead of throwing more people (and money) at the problem, we turn your processes into code — unlocking new recurring SaaS revenue streams for your customers, or automating the internal work that eats 30–50% of employee time.
                 </motion.p>
-                <motion.div 
+                <motion.div
                   variants={itemVariants}
                   className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm"
                 >
@@ -85,8 +85,8 @@ const WhyWrlds = () => {
                   </p>
                 </motion.div>
               </motion.div>
-              
-              <motion.div 
+
+              <motion.div
                 variants={itemVariants}
                 className="text-center"
               >
@@ -97,29 +97,29 @@ const WhyWrlds = () => {
               </motion.div>
             </div>
           </motion.div>
-          
-          <motion.div 
-            className="mb-12" 
-            initial="hidden" 
-            whileInView="visible" 
+
+          <motion.div
+            className="mb-12"
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={containerVariants}
           >
-            <motion.div 
-              variants={itemVariants} 
+            <motion.div
+              variants={itemVariants}
               className="text-center mb-12"
             >
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 That means:
               </h3>
             </motion.div>
-            
-            <motion.div 
-              variants={containerVariants} 
+
+            <motion.div
+              variants={containerVariants}
               className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto"
             >
-              <motion.div 
-                variants={itemVariants} 
+              <motion.div
+                variants={itemVariants}
                 className="bg-gradient-to-br from-gray-50 to-blue-50 p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="flex items-start">
@@ -131,9 +131,9 @@ const WhyWrlds = () => {
                   </div>
                 </div>
               </motion.div>
-              
-              <motion.div 
-                variants={itemVariants} 
+
+              <motion.div
+                variants={itemVariants}
                 className="bg-gradient-to-br from-gray-50 to-green-50 p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="flex items-start">
@@ -145,9 +145,9 @@ const WhyWrlds = () => {
                   </div>
                 </div>
               </motion.div>
-              
-              <motion.div 
-                variants={itemVariants} 
+
+              <motion.div
+                variants={itemVariants}
                 className="bg-gradient-to-br from-gray-50 to-purple-50 p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="flex items-start">
@@ -161,12 +161,12 @@ const WhyWrlds = () => {
               </motion.div>
             </motion.div>
           </motion.div>
-          
-          <motion.div 
-            variants={itemVariants} 
+
+          <motion.div
+            variants={itemVariants}
             className="text-center"
           >
-            <button 
+            <button
               onClick={() => setIsCalendlyModalOpen(true)}
               className="inline-flex items-center px-8 py-4 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all text-lg font-semibold shadow-lg hover:shadow-xl group"
             >
@@ -178,12 +178,12 @@ const WhyWrlds = () => {
       </section>
 
       {/* Calendly Modal */}
-      <CalendlyModal 
-        isOpen={isCalendlyModalOpen} 
-        onClose={() => setIsCalendlyModalOpen(false)} 
+      <CalendlyModal
+        isOpen={isCalendlyModalOpen}
+        onClose={() => setIsCalendlyModalOpen(false)}
       />
     </>
   );
 };
 
-export default WhyWrlds;
+export default WhyCrewCut;

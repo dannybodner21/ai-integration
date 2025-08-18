@@ -48,10 +48,10 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <img src="/lovable-uploads/7d120ee6-3614-4b75-9c35-716d54490d67.png" alt="WRLDS Technologies Logo" className={cn("h-8 w-auto", isScrolled ? "" : "brightness-0 invert")} />
+              <span className={cn("text-xl font-bold", isScrolled ? "text-gray-900" : "text-white")}>Crew Cut</span>
             </Link>
           </div>
-          
+
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <NavigationMenu className={cn(isScrolled ? "" : "text-white")}>
@@ -63,7 +63,7 @@ const Navbar = () => {
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
-                
+
                 <NavigationMenuItem>
                   <Link to="/about">
                     <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), isScrolled ? "text-gray-700 hover:text-gray-900" : "text-gray-100 hover:text-white bg-transparent hover:bg-gray-800")}>
@@ -71,7 +71,7 @@ const Navbar = () => {
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
-                
+
                 <NavigationMenuItem>
                   <Link to="/apps">
                     <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), isScrolled ? "text-gray-700 hover:text-gray-900" : "text-gray-100 hover:text-white bg-transparent hover:bg-gray-800")}>
@@ -79,13 +79,13 @@ const Navbar = () => {
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
-                
+
                 <NavigationMenuItem>
                   <button onClick={() => scrollToSection('proof')} className={cn("px-4 py-2 rounded-md transition-colors", isScrolled ? "text-gray-700 hover:text-gray-900 bg-transparent hover:bg-gray-100" : "text-gray-100 hover:text-white bg-transparent hover:bg-gray-800")}>
                     Customer Cases
                   </button>
                 </NavigationMenuItem>
-                
+
                 <NavigationMenuItem>
                   <button onClick={() => scrollToSection('contact')} className={cn("px-4 py-2 rounded-md transition-colors", isScrolled ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-gray-700 text-white hover:bg-gray-600")}>
                     Contact Us
@@ -94,7 +94,7 @@ const Navbar = () => {
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-          
+
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button onClick={toggleMenu} className={cn("focus:outline-none", isScrolled ? "text-gray-700" : "text-white")}>
@@ -113,26 +113,26 @@ const Navbar = () => {
           }}>
             Home
           </Link>
-          
+
           <Link to="/about" className={cn("block px-3 py-1.5 rounded-md text-sm", isScrolled ? "text-gray-700 hover:bg-gray-50" : "text-gray-200 hover:bg-gray-900")} onClick={() => {
             setIsMenuOpen(false);
             window.scrollTo(0, 0);
           }}>
             About Us
           </Link>
-          
+
           <Link to="/apps" className={cn("block px-3 py-1.5 rounded-md text-sm", isScrolled ? "text-gray-700 hover:bg-gray-50" : "text-gray-200 hover:bg-gray-900")} onClick={() => {
             setIsMenuOpen(false);
             window.scrollTo(0, 0);
           }}>
             See Our Apps
           </Link>
-          
+
           {/* Customer Cases - scrolls to proof section */}
           <button onClick={() => scrollToSection('proof')} className={cn("block w-full text-left px-3 py-1.5 rounded-md text-sm", isScrolled ? "text-gray-700 hover:bg-gray-50" : "text-gray-200 hover:bg-gray-900")}>
             Customer Cases
           </button>
-          
+
           <button onClick={() => scrollToSection('contact')} className={cn("block w-full text-left px-3 py-1.5 rounded-md text-sm", isScrolled ? "text-gray-700 bg-gray-200 hover:bg-gray-300" : "text-white bg-gray-700 hover:bg-gray-600")}>
             Contact Us
           </button>

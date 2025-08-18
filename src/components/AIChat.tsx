@@ -32,9 +32,9 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
       setTimeout(() => {
         const chatElement = document.querySelector('.banner-container');
         if (chatElement) {
-          chatElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
+          chatElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
           });
         }
       }, 100); // Small delay to ensure animation starts
@@ -64,10 +64,7 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
     setIsLoading(true);
 
     try {
-      // Check if Claude API is configured
-      if (!claudeAPI.isConfigured()) {
-        throw new Error('Claude API not configured. Please set your API key.');
-      }
+      // Claude API is now handled by backend
 
       // Convert messages to Claude format
       const conversationHistory: ClaudeMessage[] = messages
@@ -78,10 +75,16 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
         }));
 
       // Get response from Claude API
-      const systemPrompt = `You are an AI assistant specializing in custom AI & SaaS tools, business automation, and process optimization. You help businesses understand how to implement AI solutions that can save 30-50% of wasted hours and create new revenue streams. Be helpful, professional, and provide actionable insights. Keep responses concise but informative.`;
-      
+      const systemPrompt = `You are an AI business consultant specializing in custom AI & SaaS tools. When a user describes their business, provide exactly 3 specific, actionable ways they can implement AI to save money and increase efficiency. Focus on:
+
+1. **Cost Reduction**: How AI can automate expensive manual processes
+2. **Time Savings**: How AI can eliminate 30-50% of wasted hours
+3. **Revenue Generation**: How AI can create new profit opportunities
+
+Be specific, practical, and mention concrete AI tools or approaches. Keep each suggestion concise but actionable. Format your response with clear numbered points.`;
+
       const response = await claudeAPI.chat(inputValue, conversationHistory, systemPrompt);
-      
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: response,
@@ -92,6 +95,12 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error getting AI response:', error);
+      console.error('Error details:', {
+        name: error instanceof Error ? error.name : 'Unknown',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace'
+      });
+
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: error instanceof Error ? error.message : "I'm sorry, I encountered an error. Please try again.",
@@ -118,16 +127,16 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
             className="overflow-hidden"
           >
             {/* Messages Container */}
-            <div className="bg-white rounded-xl p-4 mb-4 h-48 overflow-y-auto shadow-sm relative">
+            <div className="bg-black/80 border-2 border-black rounded-xl p-4 mb-4 h-48 overflow-y-auto shadow-sm relative w-full">
               {/* Close Button */}
               <button
                 onClick={() => setIsExpanded(false)}
-                className="absolute top-2 right-2 p-1.5 bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 rounded-full transition-colors z-10"
+                className="absolute top-2 right-2 p-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-full transition-colors z-10"
                 title="Close chat"
               >
                 <X className="w-4 h-4" />
               </button>
-              
+
               <AnimatePresence>
                 {messages.map((message) => (
                   <motion.div
@@ -138,30 +147,28 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
                     className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[80%] p-3 rounded-lg ${
-                        message.role === 'user'
-                          ? 'bg-orange-600 text-white'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}
+                      className={`max-w-[80%] p-3 rounded-lg ${message.role === 'user'
+                        ? 'bg-orange-600 text-white'
+                        : 'bg-gray-800 text-white'
+                        }`}
                     >
                       <p className="text-sm">{message.content}</p>
-                      <p className={`text-xs mt-1 ${
-                        message.role === 'user' ? 'text-orange-100' : 'text-gray-500'
-                      }`}>
+                      <p className={`text-xs mt-1 ${message.role === 'user' ? 'text-orange-100' : 'text-gray-300'
+                        }`}>
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                   </motion.div>
                 ))}
               </AnimatePresence>
-              
+
               {isLoading && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="flex justify-start mb-4"
                 >
-                  <div className="bg-gray-100 p-3 rounded-lg">
+                  <div className="bg-gray-800 p-3 rounded-lg">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -170,7 +177,7 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
                   </div>
                 </motion.div>
               )}
-              
+
               <div ref={messagesEndRef} />
             </div>
           </motion.div>
@@ -179,7 +186,10 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
 
       {/* Chat Input */}
       <form onSubmit={handleSubmit} className="relative">
-        <div className="bg-white rounded-xl p-4 shadow-sm">
+        <div className="bg-[#242424] border-2 border-black rounded-xl p-4 shadow-sm w-full">
+          <div className="text-xs text-gray-400 mb-2 text-center">
+            💡 Describe your business type, size, and current pain points for personalized AI solutions
+          </div>
           <textarea
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -191,13 +201,13 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
                 }
               }
             }}
-            placeholder="Tell us about your business — we'll instantly reveal 3 simple ways AI can boost it today..."
-            className="w-full resize-none border-none outline-none text-gray-800 placeholder-gray-400 text-sm caret-orange-500"
+            placeholder="Describe your business (industry, size, current challenges) — we'll instantly reveal 3 AI solutions to save you money..."
+            className="w-full resize-none border-none outline-none text-white placeholder-gray-400 text-sm caret-orange-500 bg-transparent"
             rows={3}
             disabled={isLoading}
             autoFocus
           />
-          
+
           {/* Send Button */}
           <div className="flex justify-end pt-3">
             <button
