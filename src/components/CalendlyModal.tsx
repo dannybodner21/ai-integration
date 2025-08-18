@@ -83,7 +83,7 @@ const CalendlyModal = ({ isOpen, onClose }: CalendlyModalProps) => {
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  Book Your 15-Minute Fit Call
+                  Book your 30 min cut — find out how much waste we can shave off
                 </h2>
                 <button
                   onClick={onClose}

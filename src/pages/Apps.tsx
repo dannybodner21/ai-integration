@@ -82,8 +82,7 @@ const Apps = () => {
                 See Our Apps
               </h1>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Explore our collection of innovative applications built with cutting-edge technology. 
-                Each app showcases our expertise in creating powerful, user-friendly solutions.
+                Discover what we're building for others — AI solutions that replace manual work, reduce overhead, and deliver results.
               </p>
             </motion.div>
 
