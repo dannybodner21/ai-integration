@@ -49,7 +49,13 @@ const Hero = () => {
       <motion.div className="relative w-full" initial="hidden" animate="visible" variants={containerVariants}>
         <BackgroundBeamsWithCollision>
           <div className="pt-20 sm:pt-24 md:pt-32 w-full">
-            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center min-h-full py-8">
+            <motion.div
+              className="w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center min-h-full py-8"
+              animate={{
+                paddingBottom: isChatExpanded ? "3rem" : "2rem"
+              }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+            >
               <motion.div className="w-full max-w-4xl text-center" variants={itemVariants}>
                 <motion.h2
                   className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-700 to-neutral-100 dark:from-neutral-600 dark:to-neutral-100 text-2xl md:text-4xl lg:text-7xl font-sans py-2 md:py-10 relative z-20 font-bold tracking-tight mb-6"
@@ -75,8 +81,9 @@ const Hero = () => {
                 </motion.p>
 
                 {/* AI Chat Section */}
-                <motion.div className="mb-8 rounded-xl w-full max-w-2xl mx-auto" variants={itemVariants}
-
+                <motion.div
+                  className="mb-8 rounded-xl w-full max-w-2xl mx-auto"
+                  variants={itemVariants}
                 >
                   <AIChat onExpandedChange={setIsChatExpanded} />
                 </motion.div>
@@ -101,7 +108,7 @@ const Hero = () => {
                   </Link>
                 </motion.div>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </BackgroundBeamsWithCollision>
       </motion.div>

@@ -117,75 +117,8 @@ Be specific, practical, and mention concrete AI tools or approaches. Keep each s
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="overflow-hidden"
-          >
-            {/* Messages Container */}
-            <div className="bg-black/80 border-2 border-black rounded-xl p-4 mb-4 h-48 overflow-y-auto shadow-sm relative w-full">
-              {/* Close Button */}
-              <button
-                onClick={() => setIsExpanded(false)}
-                className="absolute top-2 right-2 p-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-full transition-colors z-10"
-                title="Close chat"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
-              <AnimatePresence>
-                {messages.map((message) => (
-                  <motion.div
-                    key={message.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div
-                      className={`max-w-[80%] p-3 rounded-lg ${message.role === 'user'
-                        ? 'bg-orange-600 text-white'
-                        : 'bg-gray-800 text-white'
-                        }`}
-                    >
-                      <p className="text-sm">{message.content}</p>
-                      <p className={`text-xs mt-1 ${message.role === 'user' ? 'text-orange-100' : 'text-gray-300'
-                        }`}>
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-
-              {isLoading && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex justify-start mb-4"
-                >
-                  <div className="bg-gray-800 p-3 rounded-lg">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              <div ref={messagesEndRef} />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Chat Input */}
-      <form onSubmit={handleSubmit} className="relative">
+      {/* Chat Input - Always visible at top */}
+      <form onSubmit={handleSubmit} className="relative mb-4">
         <div className="bg-[#242424] border-2 border-black rounded-xl p-4 shadow-sm w-full">
           <div className="text-xs text-gray-400 mb-2 text-center">
             💡 Describe your business type, size, and current pain points for personalized AI solutions
@@ -221,6 +154,78 @@ Be specific, practical, and mention concrete AI tools or approaches. Keep each s
           </div>
         </div>
       </form>
+
+      {/* Chat Messages - Appears below input and pushes content down */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            {/* Messages Container */}
+            <div className="bg-black/80 border-2 border-black rounded-xl p-4 mb-4 min-h-[12rem] max-h-96 overflow-y-auto shadow-sm relative w-full">
+              {/* Close Button */}
+              <button
+                onClick={() => setIsExpanded(false)}
+                className="absolute top-2 right-2 p-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-full transition-colors z-10"
+                title="Close chat"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <AnimatePresence>
+                {messages.map((message) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[85%] p-4 rounded-xl ${message.role === 'user'
+                          ? 'bg-orange-600 text-white ml-auto'
+                          : 'bg-gradient-to-br from-gray-800 to-gray-900 text-white border border-gray-700'
+                        }`}
+                    >
+                      <p className={`text-sm leading-relaxed ${message.role === 'assistant' ? 'whitespace-pre-line' : ''
+                        }`}>
+                        {message.content}
+                      </p>
+                      <p className={`text-xs mt-2 opacity-70 ${message.role === 'user' ? 'text-orange-100' : 'text-gray-400'
+                        }`}>
+                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+
+              {isLoading && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex justify-start mb-4"
+                >
+                  <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 p-4 rounded-xl">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                      <span className="text-blue-400 text-xs ml-2">AI is thinking...</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
