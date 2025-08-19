@@ -3,6 +3,7 @@ import PageLayout from '@/components/PageLayout';
 import Hero from '@/components/Hero';
 import WhyCrewCut from '@/components/WhyWrlds';
 import Process from '@/components/Process';
+import SeeOurApps from '@/components/SeeOurApps';
 import Proof from '@/components/Proof';
 import OfferStack from '@/components/OfferStack';
 import Pricing from '@/components/Pricing';
@@ -33,6 +34,7 @@ const Index = () => {
       <Hero />
       <WhyCrewCut />
       <Process />
+      <SeeOurApps />
       <Proof />
       <OfferStack />
       <Pricing />

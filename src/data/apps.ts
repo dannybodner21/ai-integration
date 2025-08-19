@@ -8,6 +8,12 @@ export interface App {
   technologies: string[];
   demoUrl?: string;
   githubUrl?: string;
+  demoMetrics?: {
+    title: string;
+    value: string;
+    change?: string;
+  }[];
+  demoHighlights?: string[];
 }
 
 export const apps: App[] = [
@@ -25,7 +31,19 @@ export const apps: App[] = [
       'Cost analytics'
     ],
     technologies: ['React', 'TypeScript', 'OpenAI API', 'Tailwind CSS'],
-    demoUrl: '/apps/writing-editor'
+    demoUrl: '/apps/writing-editor',
+    demoMetrics: [
+      { title: 'Savings', value: '$2.4M', change: '+12%' },
+      { title: 'Fuel Eff.', value: '94.2%' },
+      { title: 'On-Time', value: '87.5%' },
+      { title: 'Route Opt.', value: '91.8%' }
+    ],
+    demoHighlights: [
+      'Live Fleet Map with real-time vehicle tracking',
+      'Route optimization algorithms',
+      'Real-time alerts and notifications',
+      'Performance analytics dashboard'
+    ]
   },
   {
     id: 'ai-logistics-optimizer-2',
@@ -41,7 +59,19 @@ export const apps: App[] = [
       'Portfolio management'
     ],
     technologies: ['React', 'Recharts', 'Claude API', 'TypeScript'],
-    demoUrl: '/apps/ai-logistics-optimizer-2'
+    demoUrl: '/apps/ai-logistics-optimizer-2',
+    demoMetrics: [
+      { title: 'Total Units', value: '152' },
+      { title: 'Portfolio Value', value: '$25.5M' },
+      { title: 'Avg Cap Rate', value: '6.7%' },
+      { title: 'Cash Flow', value: '$269K' }
+    ],
+    demoHighlights: [
+      'Multi-property portfolio analysis',
+      'AI-generated financial insights',
+      'Professional PDF reporting',
+      'Real-time market data integration'
+    ]
   }
 ];
 
