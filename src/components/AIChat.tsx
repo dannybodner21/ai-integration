@@ -28,16 +28,7 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
   useEffect(() => {
     if (isExpanded) {
       scrollToBottom();
-      // Smooth scroll the page to accommodate the expanded chat
-      setTimeout(() => {
-        const chatElement = document.querySelector('.banner-container');
-        if (chatElement) {
-          chatElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      }, 100); // Small delay to ensure animation starts
+      // Don't scroll the page - just expand the chat in place
     }
     // Notify parent component of expanded state change
     onExpandedChange?.(isExpanded);
@@ -187,15 +178,15 @@ Be specific, practical, and mention concrete AI tools or approaches. Keep each s
                   >
                     <div
                       className={`max-w-[85%] p-4 rounded-xl ${message.role === 'user'
-                          ? 'bg-orange-600 text-white ml-auto'
-                          : 'bg-gradient-to-br from-gray-800 to-gray-900 text-white border border-gray-700'
+                        ? 'bg-gray-800 text-white ml-auto'
+                        : 'bg-white text-black border border-purple-400'
                         }`}
                     >
                       <p className={`text-sm leading-relaxed ${message.role === 'assistant' ? 'whitespace-pre-line' : ''
                         }`}>
                         {message.content}
                       </p>
-                      <p className={`text-xs mt-2 opacity-70 ${message.role === 'user' ? 'text-orange-100' : 'text-gray-400'
+                      <p className={`text-xs mt-2 opacity-70 ${message.role === 'user' ? 'text-gray-300' : 'text-gray-600'
                         }`}>
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>

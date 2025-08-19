@@ -55,6 +55,7 @@ const Hero = () => {
                 paddingBottom: isChatExpanded ? "3rem" : "2rem"
               }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
+              style={{ scrollBehavior: 'auto' }}
             >
               <motion.div className="w-full max-w-4xl text-center" variants={itemVariants}>
                 <motion.h2
