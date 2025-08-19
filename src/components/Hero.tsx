@@ -50,14 +50,18 @@ const Hero = () => {
         <BackgroundBeamsWithCollision>
           <div className="pt-0 sm:pt-0 md:pt-0 w-full">
             <motion.div
-              className="w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center min-h-full py-8"
+              className="w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center py-8"
               animate={{
-                paddingBottom: isChatExpanded ? "3rem" : "2rem"
+                paddingBottom: isChatExpanded ? "4rem" : "2rem"
               }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
               style={{ scrollBehavior: 'auto' }}
             >
-              <motion.div className="w-full max-w-4xl text-center" variants={itemVariants}>
+              <motion.div 
+                className="w-full max-w-4xl text-center" 
+                variants={itemVariants}
+                style={{ transition: 'all 0.3s ease-in-out' }}
+              >
                 <motion.h2
                   className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-700 to-neutral-100 dark:from-neutral-600 dark:to-neutral-100 text-2xl md:text-4xl lg:text-7xl font-sans py-2 md:py-10 relative z-20 font-bold tracking-tight mb-6"
                   variants={itemVariants}
@@ -83,16 +87,30 @@ const Hero = () => {
 
                 {/* AI Chat Section */}
                 <motion.div
-                  className="mb-8 rounded-xl w-full max-w-2xl mx-auto"
+                  className="rounded-xl w-full max-w-2xl mx-auto"
                   variants={itemVariants}
+                  style={{ 
+                    marginBottom: isChatExpanded ? '1rem' : '2rem',
+                    transition: 'margin-bottom 0.3s ease-in-out'
+                  }}
                 >
                   <AIChat onExpandedChange={setIsChatExpanded} />
                 </motion.div>
 
                 {/* CTA Buttons */}
-                <motion.div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 justify-center items-center" variants={itemVariants}>
+                <motion.div 
+                  className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center relative z-10" 
+                  variants={itemVariants}
+                  style={{ 
+                    marginTop: isChatExpanded ? '2rem' : '1rem',
+                    transition: 'margin-top 0.3s ease-in-out'
+                  }}
+                >
                   {/* Book Your 15-Minute Fit Call */}
-                  <button className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                  <button 
+                    onClick={() => setIsCalendlyModalOpen(true)}
+                    className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+                  >
                     <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
                     <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-[15px] py-1 text-sm font-medium text-white backdrop-blur-3xl">
                       Book Your 15-Minute Fit Call

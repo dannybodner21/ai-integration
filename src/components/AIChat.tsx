@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, MessageSquare, X } from 'lucide-react';
+import { Send, MessageSquare, X, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { claudeAPI, ClaudeMessage } from '@/services/claudeApi';
+import emailjs from 'emailjs-com';
 
 interface Message {
   id: string;
@@ -19,8 +20,72 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [conversationStage, setConversationStage] = useState<'initial' | 'followup' | 'email_collection'>('initial');
+  const [collectedEmail, setCollectedEmail] = useState<string>('');
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // EmailJS configuration
+  const EMAILJS_SERVICE_ID = "service_i3h66xg";
+  const EMAILJS_TEMPLATE_ID = "template_fgq53nh";
+  const EMAILJS_PUBLIC_KEY = "wQmcZvoOqTAhGnRZ3";
+
+  // Email validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Check if message contains an email
+  const extractEmail = (text: string): string | null => {
+    const match = text.match(emailRegex);
+    return match ? match[0] : null;
+  };
+
+  // Send PDF report email
+  const sendPDFReport = async (email: string, businessContext: string) => {
+    setIsSendingEmail(true);
+    
+    try {
+      const templateParams = {
+        from_name: "Crewcut AI",
+        from_email: "ai@crewcut.com",
+        message: `Thank you for your interest! Here's your personalized AI implementation guide based on your business: ${businessContext}`,
+        to_name: "Business Owner",
+        reply_to: "hello@wrlds.com",
+        subject: "Your AI Implementation Guide - Crewcut AI"
+      };
+      
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY
+      );
+      
+      // Add success message
+      const successMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: "Perfect! I've sent your personalized AI implementation guide to your email. You should receive it shortly. Feel free to ask me any follow-up questions about implementing these AI solutions in your business!",
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, successMessage]);
+      setConversationStage('followup');
+      
+    } catch (error) {
+      console.error('Error sending email:', error);
+      
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: "I encountered an issue sending the email. Please try again or contact us directly at hello@wrlds.com",
+        role: 'assistant',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
 
 
   useEffect(() => {
@@ -50,7 +115,17 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
     setIsLoading(true);
 
     try {
-      // Claude API is now handled by backend
+      // Check if user provided an email
+      const email = extractEmail(inputValue);
+      
+      if (email && conversationStage === 'initial') {
+        // User provided email, send PDF report
+        setCollectedEmail(email);
+        setConversationStage('email_collection');
+        await sendPDFReport(email, messages[0]?.content || 'Business consultation');
+        setIsLoading(false);
+        return;
+      }
 
       // Convert messages to Claude format
       const conversationHistory: ClaudeMessage[] = messages
@@ -60,11 +135,13 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
           content: msg.content
         }));
 
-      // Get response from Claude API
-      const systemPrompt = `You are Crewcut AI — a witty but compassionate business consultant. Your job is to show companies how AI can cut costs, save time, and streamline teams in ways that are easy to understand.
+      // Dynamic system prompt based on conversation stage
+      let systemPrompt = '';
+      
+      if (conversationStage === 'initial') {
+        systemPrompt = `You are Crewcut AI — a witty but compassionate business consultant. Your job is to show companies how AI can cut costs, save time, and streamline teams in ways that are easy to understand.
 
 When a user describes their business:
-	•	Open with a quick, clever one-liner (light humor, barber "cutting" vibe).
 	•	Give exactly 3 specific, actionable ways they can use AI to reduce expenses, save hours, or operate with a leaner team.
 	•	Use simple, clear language that anyone can understand — avoid jargon.
 	•	Show compassion: frame team reduction as freeing people up for higher-value work, not cold replacement.
@@ -72,6 +149,20 @@ When a user describes their business:
 	•	Format with clear numbered points.
 	•	End every response with:
 "We can generate you a full PDF report with step-by-step instructions on how to do this — just tell us the best email to send it to."`;
+      } else {
+        // Follow-up conversation mode
+        systemPrompt = `You are Crewcut AI — a helpful business consultant. The user has already received their initial AI recommendations and PDF report. Now you're in follow-up conversation mode.
+
+Your role is to:
+	•	Answer any questions they have about implementing the AI solutions
+	•	Provide additional insights and clarification
+	•	Help them think through specific challenges
+	•	Be conversational and helpful
+	•	If they want to discuss a new business challenge, you can provide fresh AI recommendations
+	•	Keep responses concise but informative
+
+Be friendly, professional, and genuinely helpful. You're here to support their AI implementation journey.`;
+      }
 
       const response = await claudeAPI.chat(inputValue, conversationHistory, systemPrompt);
 
@@ -83,6 +174,12 @@ When a user describes their business:
       };
 
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Update conversation stage after first response
+      if (conversationStage === 'initial') {
+        setConversationStage('followup');
+      }
+      
     } catch (error) {
       console.error('Error getting AI response:', error);
       console.error('Error details:', {
@@ -106,12 +203,14 @@ When a user describes their business:
   // Removed handleInputFocus - no longer auto-expands on focus
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="w-full max-w-2xl mx-auto relative">
       {/* Chat Input - Always visible at top */}
       <form onSubmit={handleSubmit} className="relative mb-4">
         <div className="bg-[#242424] border-2 border-black rounded-xl p-4 shadow-sm w-full">
           <div className="text-xs text-gray-400 mb-2 text-center">
-            💡 Describe your business type, size, and current pain points for personalized AI solutions
+            {conversationStage === 'initial' && "💡 Describe your business type, size, and current pain points for personalized AI solutions"}
+            {conversationStage === 'email_collection' && "📧 Please provide your email address to receive your personalized AI implementation guide"}
+            {conversationStage === 'followup' && "💬 Ask me anything about implementing AI solutions in your business"}
           </div>
           <textarea
             value={inputValue}
@@ -124,10 +223,16 @@ When a user describes their business:
                 }
               }
             }}
-            placeholder="Describe your business (industry, size, current challenges) — we'll instantly reveal 3 AI solutions to save you money..."
+            placeholder={
+              conversationStage === 'initial' 
+                ? "Describe your business (industry, size, current challenges) — we'll instantly reveal 3 AI solutions to save you money..."
+                : conversationStage === 'email_collection'
+                ? "Enter your email address (e.g., john@company.com)"
+                : "Ask me anything about AI implementation, or describe a new business challenge..."
+            }
             className="w-full resize-none border-none outline-none text-white placeholder-gray-400 text-sm caret-orange-500 bg-transparent"
             rows={3}
-            disabled={isLoading}
+            disabled={isLoading || isSendingEmail}
             autoFocus
           />
 
@@ -135,11 +240,23 @@ When a user describes their business:
           <div className="flex justify-end pt-3">
             <button
               type="submit"
-              disabled={!inputValue.trim() || isLoading}
+              disabled={!inputValue.trim() || isLoading || isSendingEmail}
               className="p-2 bg-gray-800 text-white rounded-full hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              title="Send message"
+              title={
+                isSendingEmail 
+                  ? "Sending email..." 
+                  : conversationStage === 'email_collection' 
+                    ? "Send email" 
+                    : "Send message"
+              }
             >
-              <Send className="w-4 h-4" />
+              {isSendingEmail ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : conversationStage === 'email_collection' ? (
+                <Mail className="w-4 h-4" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
             </button>
           </div>
         </div>
@@ -153,10 +270,11 @@ When a user describes their business:
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="overflow-hidden"
+            className="overflow-hidden relative"
+            style={{ zIndex: 1 }}
           >
             {/* Messages Container */}
-            <div className="bg-black/80 border-2 border-black rounded-xl p-4 mb-4 min-h-[12rem] max-h-96 overflow-y-auto shadow-sm relative w-full">
+            <div className="bg-black/80 border-2 border-black rounded-xl p-4 mb-4 min-h-[12rem] max-h-80 overflow-y-auto shadow-sm relative w-full">
               {/* Close Button */}
               <button
                 onClick={() => setIsExpanded(false)}
@@ -165,6 +283,21 @@ When a user describes their business:
               >
                 <X className="w-4 h-4" />
               </button>
+              
+              {/* Reset Button - Show when in followup mode */}
+              {conversationStage === 'followup' && (
+                <button
+                  onClick={() => {
+                    setMessages([]);
+                    setConversationStage('initial');
+                    setCollectedEmail('');
+                  }}
+                  className="absolute top-2 right-12 p-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white rounded-full transition-colors z-10"
+                  title="Start new conversation"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                </button>
+              )}
 
               <AnimatePresence>
                 {messages.map((message) => (
@@ -206,6 +339,23 @@ When a user describes their business:
                       <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
                       <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
                       <span className="text-blue-400 text-xs ml-2">AI is thinking...</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {isSendingEmail && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex justify-start mb-4"
+                >
+                  <div className="bg-gradient-to-br from-green-800 to-green-900 border border-green-700 p-4 rounded-xl">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+                      <span className="text-green-400 text-xs ml-2">Sending your AI guide...</span>
                     </div>
                   </div>
                 </motion.div>
