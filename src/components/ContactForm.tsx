@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import emailjs from 'emailjs-com';
+import { subscribeToNewsletter } from '@/services/emailSubscription';
 
 // Updated schema with honeypot field validation
 const formSchema = z.object({
@@ -21,10 +21,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-// EmailJS configuration - Updated with correct template ID
-const EMAILJS_SERVICE_ID = "service_i3h66xg";
-const EMAILJS_TEMPLATE_ID = "template_fgq53nh"; // Updated to the correct template ID
-const EMAILJS_PUBLIC_KEY = "wQmcZvoOqTAhGnRZ3";
+// Contact form configuration
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,31 +72,18 @@ const ContactForm = () => {
       console.log('Form submitted:', data);
       
       // Remove honeypot and timestamp fields before sending
-      const { honeypot, timestamp, ...emailData } = data;
+      const { honeypot, timestamp, ...contactData } = data;
       
-      // Using parameters exactly as expected by EmailJS templates
-      const templateParams = {
-        from_name: emailData.name,
-        from_email: emailData.email,
-        message: emailData.message,
-        to_name: 'WRLDS Team', // Adding recipient name parameter
-        reply_to: emailData.email // Keeping reply_to for compatibility
-      };
+      // Store contact information in Supabase
+      const result = await subscribeToNewsletter({
+        email: contactData.email,
+        first_name: contactData.name.split(' ')[0] || contactData.name,
+        last_name: contactData.name.split(' ').slice(1).join(' ') || undefined,
+        form_source: 'contact_form',
+        phone_number: undefined
+      });
       
-      console.log('Sending email with params:', templateParams);
-      console.log('Using service:', EMAILJS_SERVICE_ID);
-      console.log('Using template:', EMAILJS_TEMPLATE_ID);
-      console.log('Using public key:', EMAILJS_PUBLIC_KEY);
-      
-      // Send email directly without initializing, as it's not needed with the send method that includes the key
-      const response = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY // Re-adding the public key parameter
-      );
-      
-      console.log('Email sent successfully:', response);
+      console.log('Contact stored successfully:', result);
       
       toast({
         title: "Message sent!",

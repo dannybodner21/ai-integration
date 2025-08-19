@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, MessageSquare, X, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { claudeAPI, ClaudeMessage } from '@/services/claudeApi';
-import emailjs from 'emailjs-com';
+import { subscribeToNewsletter } from '@/services/emailSubscription';
 
 interface Message {
   id: string;
@@ -25,10 +25,7 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // EmailJS configuration
-  const EMAILJS_SERVICE_ID = "service_i3h66xg";
-  const EMAILJS_TEMPLATE_ID = "template_fgq53nh";
-  const EMAILJS_PUBLIC_KEY = "wQmcZvoOqTAhGnRZ3";
+  // Email configuration
 
   // Email validation regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,26 +36,21 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
     return match ? match[0] : null;
   };
 
-  // Send PDF report email
+  // Send PDF report email and store contact
   const sendPDFReport = async (email: string, businessContext: string) => {
     setIsSendingEmail(true);
     
     try {
-      const templateParams = {
-        from_name: "Crewcut AI",
-        from_email: "ai@crewcut.com",
-        message: `Thank you for your interest! Here's your personalized AI implementation guide based on your business: ${businessContext}`,
-        to_name: "Business Owner",
-        reply_to: "hello@wrlds.com",
-        subject: "Your AI Implementation Guide - Crewcut AI"
-      };
+      // Store contact information in Supabase
+      const result = await subscribeToNewsletter({
+        email,
+        form_source: 'ai_chat',
+        first_name: undefined,
+        last_name: undefined,
+        phone_number: undefined
+      });
       
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
-      );
+      console.log('Contact stored successfully:', result);
       
       // Add success message
       const successMessage: Message = {
@@ -72,11 +64,11 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
       setConversationStage('followup');
       
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error('Error storing contact:', error);
       
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: "I encountered an issue sending the email. Please try again or contact us directly at hello@wrlds.com",
+        content: "I encountered an issue processing your request. Please try again or contact us directly at hello@wrlds.com",
         role: 'assistant',
         timestamp: new Date()
       };

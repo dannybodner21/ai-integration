@@ -3,7 +3,7 @@ import { ArrowRight, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import emailjs from 'emailjs-com';
+import { subscribeToNewsletter } from "@/services/emailSubscription";
 import CalendlyModal from "./CalendlyModal";
 
 const Footer = () => {
@@ -27,35 +27,24 @@ const Footer = () => {
     setIsSubmitting(true);
     
     try {
-      // EmailJS configuration
-      const EMAILJS_SERVICE_ID = "service_i3h66xg";
-      const EMAILJS_TEMPLATE_ID = "template_fgq53nh";
-      const EMAILJS_PUBLIC_KEY = "wQmcZvoOqTAhGnRZ3";
+      console.log('📧 Submitting email to Supabase:', email);
       
-      const templateParams = {
-        from_name: "Website Subscriber",
-        from_email: email,
-        message: `New subscription request from the website footer.`,
-        to_name: 'WRLDS Team',
-        reply_to: email
-      };
+      const result = await subscribeToNewsletter({
+        email,
+        form_source: 'footer_newsletter'
+      });
       
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
-      );
+      console.log('✅ Supabase response:', result);
       
       toast({
         title: "Success!",
-        description: "Thank you for subscribing to our newsletter.",
+        description: result.message || "Thank you for subscribing to our newsletter.",
         variant: "default"
       });
       
       setEmail("");
     } catch (error) {
-      console.error("Error sending subscription:", error);
+      console.error("❌ Error subscribing to newsletter:", error);
       
       toast({
         title: "Error",
