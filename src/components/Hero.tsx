@@ -48,7 +48,7 @@ const Hero = () => {
     <>
       <motion.div className="relative w-full" initial="hidden" animate="visible" variants={containerVariants}>
         <BackgroundBeamsWithCollision>
-          <div className="pt-20 sm:pt-24 md:pt-32 w-full">
+          <div className="pt-0 sm:pt-0 md:pt-0 w-full">
             <motion.div
               className="w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center min-h-full py-8"
               animate={{

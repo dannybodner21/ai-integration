@@ -21,18 +21,13 @@ const AIChat = ({ onExpandedChange }: AIChatProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+
 
   useEffect(() => {
-    if (isExpanded) {
-      scrollToBottom();
-      // Don't scroll the page - just expand the chat in place
-    }
+    // Don't scroll the page - just expand the chat in place
     // Notify parent component of expanded state change
     onExpandedChange?.(isExpanded);
-  }, [messages, isExpanded, onExpandedChange]);
+  }, [isExpanded, onExpandedChange]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -179,7 +174,7 @@ Be specific, practical, and mention concrete AI tools or approaches. Keep each s
                     <div
                       className={`max-w-[85%] p-4 rounded-xl ${message.role === 'user'
                         ? 'bg-gray-800 text-white ml-auto'
-                        : 'bg-white text-black border border-purple-400'
+                        : 'bg-white/80 text-black border-2 border-purple-400'
                         }`}
                     >
                       <p className={`text-sm leading-relaxed ${message.role === 'assistant' ? 'whitespace-pre-line' : ''
