@@ -32,8 +32,8 @@ class ClaudeAPIService {
 
   private async makeRequest(requestBody: ClaudeRequest): Promise<any> {
     try {
-      // Call our backend server instead of Claude API directly
-      const response = await fetch('http://localhost:3001/api/claude', {
+      // Call our Vercel function
+      const response = await fetch('/api/claude', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
