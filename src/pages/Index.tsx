@@ -7,7 +7,7 @@ import Proof from '@/components/Proof';
 import OfferStack from '@/components/OfferStack';
 import Pricing from '@/components/Pricing';
 import FAQ from '@/components/FAQ';
-import Testimonials from '@/components/Testimonials';
+
 import FinalCTA from '@/components/FinalCTA';
 import SEO from '@/components/SEO';
 import { useEffect } from 'react';
@@ -37,7 +37,6 @@ const Index = () => {
       <OfferStack />
       <Pricing />
       <FAQ />
-      <Testimonials />
       <FinalCTA />
     </PageLayout>
   );
